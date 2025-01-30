@@ -1,0 +1,195 @@
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=VT323&display=swap");
+
+:root {
+    --terminal-black: #0c0c0c;
+    --terminal-green: #4af626;
+    --terminal-bright-green: #00ff00;
+    --terminal-dim-green: rgba(74, 246, 38, 0.4);
+    --terminal-grey: #2a2a2a;
+    --terminal-light-grey: #888;
+    --terminal-white: #f2f2f2;
+    --glow-shadow: 0 0 10px var(--terminal-dim-green);
+    --scanline-alpha: 0.15;
+}
+
+@keyframes scanline {
+    0% {
+        transform: translateY(-100%);
+    }
+    100% {
+        transform: translateY(100%);
+    }
+}
+
+@keyframes blink {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+}
+
+@keyframes textShadowPulse {
+    0% { text-shadow: 0 0 8px var(--terminal-dim-green); }
+    50% { text-shadow: 0 0 15px var(--terminal-bright-green); }
+    100% { text-shadow: 0 0 8px var(--terminal-dim-green); }
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "IBM Plex Mono", monospace;
+    background: var(--terminal-black);
+    color: var(--terminal-green);
+    padding: 20px;
+    position: relative;
+    min-height: 100vh;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* CRT screen effect */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(transparent 50%, rgba(0, 0, 0, 0.05) 50%);
+    background-size: 100% 4px;
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* Scanline effect */
+body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        rgba(74, 246, 38, var(--scanline-alpha)),
+        transparent 50%
+    );
+    animation: scanline 8s linear infinite;
+    pointer-events: none;
+    z-index: 11;
+}
+
+header {
+    text-align: center;
+    padding: 20px;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+h1 {
+    font-family: "VT323", monospace;
+    margin: 0;
+    font-size: 3rem;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    animation: textShadowPulse 2s infinite;
+    text-shadow: 0 0 10px var(--terminal-bright-green);
+}
+
+h1::before {
+    content: "> ";
+    color: var(--terminal-bright-green);
+}
+
+h1::after {
+    content: "_";
+    animation: blink 1s infinite;
+}
+
+main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2em;
+    padding: 1em 3em;
+    margin: 0 auto;
+    max-width: 1400px;
+}
+
+.metric-snapshot {
+    background: var(--terminal-grey);
+    padding: 1.5em;
+    border: 2px solid var(--terminal-green);
+    border-radius: 4px;
+    box-shadow: 0 0 20px rgba(74, 246, 38, 0.2);
+}
+
+.metric-snapshot__origin {
+    border-bottom: 2px solid var(--terminal-dim-green);
+    padding-bottom: 1em;
+    margin-bottom: 1em;
+}
+
+.flex-container {
+    display: grid;
+    grid-template-columns: 0.35fr 1fr;
+    gap: 0.75em;
+    align-items: center;
+}
+
+.flex-container div:nth-child(odd) {
+    position: relative;
+    font-weight: bold;
+    color: var(--terminal-bright-green);
+}
+
+.flex-container div:nth-child(odd)::before {
+    content: ">> ";
+    color: var(--terminal-bright-green);
+}
+
+.flex-container div:nth-child(even) {
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--terminal-white);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 12px;
+    background: var(--terminal-black);
+}
+
+::-webkit-scrollbar-track {
+    background: var(--terminal-grey);
+    border: 1px solid var(--terminal-dim-green);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--terminal-green);
+    border: 3px solid var(--terminal-grey);
+    border-radius: 6px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    main {
+        padding: 1em;
+        grid-template-columns: 1fr;
+    }
+    
+    .metric-snapshot {
+        margin: 0 10px;
+    }
+
+    .flex-container {
+        grid-template-columns: 120px 1fr;
+    }
+}
