@@ -1,9 +1,10 @@
-# Python-generated files
+# Python-Related folders & files
 __pycache__/
-.mypy_cache
+.mypy_cache/
+.ruff_cache/
+dist/
 *.py[oc]
 build/
-dist/
 wheels/
 *.egg-info
 
@@ -14,5 +15,6 @@ wheels/
 logs/
 
 # Other
+/bak
 config/.env
 *.bak

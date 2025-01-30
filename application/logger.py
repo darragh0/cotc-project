@@ -19,9 +19,10 @@ class StdFormatter(logging.Formatter):
 
     fmt: str | None
 
-    def __init__(self, *, fmt: str | None = None) -> None:
+    def __init__(self, *, fmt: str | None = None, datefmt: str | None = None) -> None:
         super().__init__()
         self.fmt: str | None = fmt
+        self.datefmt: str | None = "%H:%M:%S" if datefmt is None else datefmt
 
     @override
     def format(self, record: logging.LogRecord) -> str:
@@ -41,7 +42,7 @@ class StdFormatter(logging.Formatter):
                     f"{self.fmt[ce + celen :]}"
                 )
 
-        return logging.Formatter(fmt, datefmt="%H:%M:%S").format(record)
+        return logging.Formatter(fmt, datefmt=self.datefmt).format(record)
 
 
 class JsonFormatter(logging.Formatter):

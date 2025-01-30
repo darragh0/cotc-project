@@ -3,11 +3,12 @@
     "disable_existing_loggers": false,
     "formatters": {
         "std": {
-            "()": "logger.StdFormatter",
-            "fmt": "<colorstart>[%(levelname).3s]<colorend> [%(asctime)s] :: %(message)s"
+            "()": "application.logger.StdFormatter",
+            "fmt": "<colorstart>[%(levelname).3s]<colorend> [%(asctime)s] :: %(message)s",
+            "datefmt": "%H:%M:%S"
         },
         "json": {
-            "()": "logger.JsonFormatter",
+            "()": "application.logger.JsonFormatter",
             "keys": {
                 "level": "levelname",
                 "message": "message",
@@ -22,7 +23,7 @@
     },
     "filters": {
         "dismiss_errors": {
-            "()": "logger.DismissErrorsFilter"
+            "()": "application.logger.DismissErrorsFilter"
         }
     },
     "handlers": {

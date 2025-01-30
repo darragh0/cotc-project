@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" type="image/x-icon" href="../static/ico/favicon.ico" />
+        <link rel="stylesheet" href="../static/css/styles.css" />
+        <title>Device Metrics</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+        <script>
+            var socket = io();
+            socket.on("update", (data) => {
+                const $container = $("main").empty();
+                data.metric_snapshots.forEach((ms) => {
+                    const $snapshotDiv = $("<div>").addClass("metric-snapshot");
+
+                    const $originDiv = $("<div>").addClass(
+                        "metric-snapshot__origin"
+                    ).html(`
+                        <div class="flex-container">
+                            <div>Device</div>
+                            <div>${ms.device_name}</div>
+                            <div>Time</div>
+                            <div>${ms.timestamp}</div>
+                        </div>
+                    `);
+                    $snapshotDiv.append($originDiv);
+
+                    const $dataDiv = $("<div>").addClass(
+                        "metric-snapshot__data"
+                    );
+                    let metricsHtml = '<div class="flex-container">';
+                    ms.metrics.forEach((m) => {
+                        metricsHtml += `
+                            <div>${m.name}</div>
+                            <div>${m.value.toFixed(2)} ${m.unit}</div>
+                        `;
+                    });
+                    metricsHtml += "</div>";
+                    $dataDiv.html(metricsHtml);
+                    $snapshotDiv.append($dataDiv);
+
+                    $container.append($snapshotDiv);
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <header>
+            <h1>Device Metrics Dashboard</h1>
+        </header>
+        <main></main>
+    </body>
+</html>

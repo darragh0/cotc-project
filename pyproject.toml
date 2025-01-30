@@ -9,4 +9,6 @@ dependencies = [
     "python-dotenv>=1.0.1",
     "psutil>=6.1.1",
     "types-psutil>=6.1.0.20241221",
+    "flask-socketio>=5.5.1",
+    "types-flask-socketio>=5.5.0.20241227",
 ]
