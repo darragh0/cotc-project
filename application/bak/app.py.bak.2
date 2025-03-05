@@ -1,0 +1,82 @@
+import json
+import logging
+from functools import wraps
+from logging.config import dictConfig
+from pathlib import Path
+from typing import Any, Callable, Final, Self
+
+from flask import Flask, render_template, request
+from flask_sqlalchemy import SQLAlchemy
+
+
+class App:
+    CONFIG_PATH: Final[str] = "config/config.json"
+
+    app: Flask
+    db: SQLAlchemy
+    root_dir: Path
+
+    def __init__(self) -> None:
+        self.app = Flask(__name__)
+        self.root_dir: Path = Path(__file__).parent
+        self._init_config(self.root_dir / App.CONFIG_PATH)
+        self._init_routes()
+        self.db = SQLAlchemy(self.app)
+
+    def run(self) -> None:
+        self.app.run()
+
+    @staticmethod
+    def route(*args: str, **kwargs: Any) -> Callable:
+        def decorator(func: Callable) -> Callable:
+            func.routes = args
+            func.kwargs = kwargs
+
+            @wraps(func)
+            def wrapper(self: Self) -> str:
+                return func(self)
+
+            return wrapper
+
+        return decorator
+
+    @route("/", "/index", "/home")
+    def route_home(self) -> str:
+        self.app.logger.info("Home webpage accessed")
+        return render_template("index.html", metric_snapshots=[])
+
+    @route("/metrics", methods=["POST"])
+    def route_json(self) -> tuple[dict[str, str], int]:
+        data: Any = request.json
+        self.app.logger.info("JSON data received: %s", data)
+        return {"status": "success"}, 20
+
+    def _init_config(self, path: Path) -> None:
+        logging.basicConfig(level=logging.INFO)
+
+        with Path.open(path) as file:
+            cfg: dict = json.load(file)
+
+        # Logging config
+        logging_cfg: dict = cfg["logging"]
+        log_file_output: str = logging_cfg["handlers"]["file"]["filename"]
+        logging_cfg["handlers"]["file"]["filename"] = self.root_dir / log_file_output
+        dictConfig(logging_cfg)
+
+        # Flask config
+        self.app.config.update(cfg["app"])
+
+    def _init_routes(self) -> None:
+        for attr in dir(self):
+            if attr.startswith("route_"):
+                func = getattr(self, attr)
+
+                for route in func.routes:
+                    self.app.route(route, **func.kwargs)(func)
+
+    def _init_db(self) -> None:
+        with self.app.app_context():
+            self.db.create_all()
+
+
+app: App = App()

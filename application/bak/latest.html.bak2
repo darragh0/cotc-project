@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" type="image/x-icon" href="../static/ico/favicon.ico" />
+        <link rel="stylesheet" href="../static/css/styles.css" />
+        <title>Device Metrics</title>
+    </head>
+    <body>
+        <header>
+            <h1>Device Metrics Dashboard</h1>
+        </header>
+        <main>
+            <div id="latest">
+                {% for s in snapshots %}
+                <div class="latest__snapshot">
+                    <div class="latest__snapshot__origin">
+                        <div class="flex-container">
+                            <div>Origin</div>
+                            <div>{{ s.origin }}</div>
+                            <div>Time</div>
+                            <div>{{ s.timestamp }}</div>
+                        </div>
+                    </div>
+                    <div class="latest__snapshot__data">
+                        <div class="flex-container">
+                            {% for m in s.metrics %}
+                            <div>{{ m.name }}</div>
+                            <div>
+                                {{ "{:,.2f}".format(m.value) }} {{ m.unit }}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </main>
+    </body>
+</html>

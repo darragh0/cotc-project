@@ -1,0 +1,120 @@
+#history {
+  padding: 1em 3em;
+  margin: 2em auto;
+  max-width: 1400px;
+}
+
+.history__title {
+  font-family: "VT323", monospace;
+  font-size: 2rem;
+  margin-bottom: 1em;
+  color: var(--terminal-green);
+  text-shadow: 0 0 8px var(--terminal-dim-green);
+  text-transform: uppercase;
+  position: relative;
+}
+
+.history__title::before {
+  content: ">> ";
+  color: var(--terminal-green);
+}
+
+.history__title::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 200px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--terminal-green), transparent);
+}
+
+.history__table-container {
+  background: var(--terminal-grey);
+  border: 2px solid var(--terminal-green);
+  border-radius: 4px;
+  box-shadow: 0 0 20px rgba(255, 220, 38, 0.2);
+  overflow-x: auto;
+  padding: 0;
+  position: relative;
+}
+
+.history__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: "IBM Plex Mono", monospace;
+  color: var(--terminal-white);
+  table-layout: auto;
+}
+
+.history__table thead {
+  background-color: var(--terminal-black);
+}
+
+.history__table th {
+  padding: 0.75em 1em;
+  text-align: left;
+  color: var(--terminal-green);
+  border-bottom: 2px solid var(--terminal-dim-green);
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.history__table td {
+  padding: 0.75em 1em;
+  border-bottom: 1px solid var(--terminal-dim-green);
+}
+
+.history__table tbody tr:hover {
+  background-color: rgba(38, 255, 56, 0.1);
+}
+
+.history__table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.metrics-btn {
+  font-family: "IBM Plex Mono", monospace;
+  background-color: var(--terminal-black);
+  color: var(--terminal-purple);
+  border: 1px solid var(--terminal-purple);
+  padding: 0.4em 0.8em;
+  border-radius: 3px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.metrics-btn:hover {
+  background-color: var(--terminal-purple);
+  box-shadow: 0 0 8px var(--terminal-purple);
+  color: var(--terminal-black);
+}
+
+.metrics-btn-icon {
+  font-size: 0.8em;
+  transition: transform 0.2s ease;
+}
+
+.metrics-btn:hover .metrics-btn-icon {
+  transform: rotate(90deg);
+}
+
+@media (max-width: 768px) {
+  #history {
+    padding: 1em;
+  }
+
+  .history__title {
+    font-size: 1.5rem;
+  }
+
+  .history__table th,
+  .history__table td {
+    padding: 0.5em;
+    font-size: 0.9rem;
+  }
+}

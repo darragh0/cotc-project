@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Metrics History{% endblock %}
+
+{% block additional_css %}
+<link rel="stylesheet" href="../static/css/history.css" />
+{% endblock %}
+
+{% block content %}
+<div id="history">
+    <h2 class="history__title">Metrics History</h2>
+    <div class="history__table-container">
+        <table class="history__table">
+            <thead>
+                <tr>
+                    <th>Origin</th>
+                    <th>Timestamp</th>
+                    <th>Metrics</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in snapshots %}
+                <tr>
+                    <td>{{ s.origin }}</td>
+                    <td>{{ s.timestamp }}</td>
+                    <td class="metrics-cell">
+                        <label
+                            for="modal-trigger-{{ loop.index }}"
+                            class="metrics-btn">
+                            {{ s.metrics|length }} metrics
+                            <span class="metrics-btn-icon">▶</span>
+                        </label>
+
+                        <input
+                            tabindex="-1"
+                            type="checkbox"
+                            id="modal-trigger-{{ loop.index }}"
+                            class="modal-checkbox" />
+
+                        <div class="modal">
+                            <label
+                                for="modal-trigger-{{ loop.index }}"
+                                class="modal-overlay"></label>
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h3 class="modal-title">
+                                        Metrics Details
+                                    </h3>
+                                    <label
+                                        for="modal-trigger-{{ loop.index }}"
+                                        class="close-modal"
+                                        >&times;</label
+                                    >
+                                </div>
+                                <div class="modal-body">
+                                    <div class="modal-origin">
+                                        <strong>Origin:</strong> {{ s.origin }}
+                                    </div>
+                                    <div class="modal-timestamp">
+                                        <strong>Timestamp:</strong>
+                                        {{ s.timestamp }}
+                                    </div>
+                                    <div class="metrics-list">
+                                        <div class="metrics-grid">
+                                            {% for m in s.metrics %}
+                                            <div class="metric-name">
+                                                {{ m.name }}
+                                            </div>
+                                            <div class="metric-value">
+                                                {{ "{:,.2f}".format(m.value) }} {{ m.unit }}
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

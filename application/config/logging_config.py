@@ -3,9 +3,7 @@ from __future__ import annotations
 import datetime as dt
 import json
 import logging
-from logging.config import dictConfig
-from pathlib import Path
-from typing import Final, override
+from typing import Final
 
 
 class StdFormatter(logging.Formatter):
@@ -24,7 +22,6 @@ class StdFormatter(logging.Formatter):
         self.fmt: str | None = fmt
         self.datefmt: str | None = "%H:%M:%S" if datefmt is None else datefmt
 
-    @override
     def format(self, record: logging.LogRecord) -> str:
         if self.fmt is not None:
             cslen: int = len("<colorstart>")
@@ -52,7 +49,6 @@ class JsonFormatter(logging.Formatter):
         super().__init__()
         self.keys: dict[str, str] = keys if keys is not None else {}
 
-    @override
     def format(self, record: logging.LogRecord) -> str:
         entry: dict[str, str] = {}
 
@@ -79,19 +75,5 @@ class JsonFormatter(logging.Formatter):
 
 
 class DismissErrorsFilter(logging.Filter):
-    @override
     def filter(self, record: logging.LogRecord) -> bool:
         return record.levelno < logging.WARNING
-
-
-def init_logger() -> None:
-    logging.basicConfig(level=logging.INFO)
-    config_file: Path = Path(__file__).parent / "config/logging_config.json"
-    logs_dir: Path = Path(__file__).parent / "logs"
-
-    with Path.open(config_file) as file:
-        logging_config: dict = json.load(file)
-
-    log_file_name: str = logging_config["handlers"]["file"]["filename"]
-    logging_config["handlers"]["file"]["filename"] = logs_dir / log_file_name
-    dictConfig(logging_config)
