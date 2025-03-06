@@ -13,7 +13,7 @@
   border: 2px solid var(--terminal-purple);
   color: var(--terminal-purple);
   border-radius: 4px;
-  box-shadow: 0 0 20px rgba(74, 246, 38, 0.2);
+  box-shadow: 0 0 35px rgba(139, 38, 246, 0.2);
   position: relative;
   overflow: hidden;
 }

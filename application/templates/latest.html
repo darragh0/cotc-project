@@ -20,7 +20,7 @@
         </div>
         <div class="latest__snapshot__data">
             <div class="flex-container">
-                {% for m in s.metrics %}
+                {% for m in s.metrics[:2] %}
                 <div>{{ m.name }}</div>
                 <div>
                     {{ "{:,.2f}".format(m.value) }} {{ m.unit }}
