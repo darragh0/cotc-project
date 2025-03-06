@@ -1,12 +1,7 @@
-{% extends "base.html" %}
-
-{% block title %}Metrics History{% endblock %}
-
-{% block additional_css %}
+{% extends "base.html" %} {% block title %}Metrics History{% endblock %} {%
+block additional_css %}
 <link rel="stylesheet" href="../static/css/history.css" />
-{% endblock %}
-
-{% block content %}
+{% endblock %} {% block content %}
 <div id="history">
     <h2 class="history__title">Metrics History</h2>
     <div class="history__table-container">
@@ -43,9 +38,7 @@
                                 class="modal-overlay"></label>
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h3 class="modal-title">
-                                        Metrics Details
-                                    </h3>
+                                    <h3 class="modal-title">Metrics Details</h3>
                                     <label
                                         for="modal-trigger-{{ loop.index }}"
                                         class="close-modal"
@@ -67,7 +60,8 @@
                                                 {{ m.name }}
                                             </div>
                                             <div class="metric-value">
-                                                {{ "{:,.2f}".format(m.value) }} {{ m.unit }}
+                                                {{ "{:,.2f}".format(m.value) }}
+                                                {{ m.unit }}
                                             </div>
                                             {% endfor %}
                                         </div>

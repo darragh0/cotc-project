@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 Base: Any = declarative_base()
 
 
-class MetricSnapshot(Base):  # type: ignore  # noqa: PGH003
+class MetricSnapshot(Base):
     __tablename__ = "metric_snapshot"
 
     id = Column(Integer, primary_key=True)
@@ -65,7 +65,7 @@ class MetricSnapshot(Base):  # type: ignore  # noqa: PGH003
         }
 
 
-class Metric(Base):  # type: ignore  # noqa: PGH003
+class Metric(Base):
     __tablename__ = "metric"
 
     id = Column(Integer, primary_key=True)
