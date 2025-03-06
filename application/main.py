@@ -1,8 +1,8 @@
 from json import loads
 from typing import TYPE_CHECKING, Any
 
-import requests
 from flask import render_template, request
+from requests import status_codes
 
 from application.base import AppBase
 from application.common.console_io import clear_scr, print_snapshots
@@ -45,7 +45,7 @@ class App(AppBase):
 
         for snapshot in json:
             ret: tuple[dict[str, str], int] = self.db.add_snapshot(snapshot)
-            if ret[1] != requests.status_codes.codes.ok:
+            if ret[1] != status_codes.codes.ok:
                 return ret
 
         self.db.print_last(2)

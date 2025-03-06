@@ -1,13 +1,16 @@
 from __future__ import annotations
 
 from datetime import datetime as dt
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from sqlalchemy import Column, DateTime, Float, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
 from application.common.util import utc_now
+
+if TYPE_CHECKING:
+    from application.common._types import JSON
 
 Base: Any = declarative_base()
 
@@ -29,7 +32,7 @@ class MetricSnapshot(Base):  # type: ignore  # noqa: PGH003
         return f"MetricSnapshot[Origin={self.origin!r}, Time={self.timestamp!r}]"
 
     @staticmethod
-    def from_json(data: dict[str, Any]) -> MetricSnapshot:
+    def from_json(data: JSON) -> MetricSnapshot:
         MetricSnapshot.validate_json(data)
 
         return MetricSnapshot(
@@ -38,7 +41,7 @@ class MetricSnapshot(Base):  # type: ignore  # noqa: PGH003
         )
 
     @staticmethod
-    def validate_json(data: dict[str, Any]) -> None:
+    def validate_json(data: JSON) -> None:
         types: dict[str, type] = MetricSnapshot.get_types()
         err_msg: str
 
@@ -79,7 +82,7 @@ class Metric(Base):  # type: ignore  # noqa: PGH003
         return f"Metric[Name={self.name!r}, Data='{self.value}{self.unit}']"
 
     @staticmethod
-    def from_json(data: dict[str, Any], snapshot_id: Column[int]) -> Metric:
+    def from_json(data: JSON, snapshot_id: Column[int]) -> Metric:
         return Metric(
             name=data["name"],
             value=data["value"],
@@ -88,7 +91,7 @@ class Metric(Base):  # type: ignore  # noqa: PGH003
         )
 
     @staticmethod
-    def validate_json(data: dict[str, Any]) -> None:
+    def validate_json(data: JSON) -> None:
         types: dict[str, type] = Metric.get_types()
         err_msg: str
 
